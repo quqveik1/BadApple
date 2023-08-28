@@ -17,9 +17,10 @@ void launchFilm()
 {
     for (int stepNum = 1; stepNum <= cSteps; stepNum++)
     {
+        std::cout << "-----------\n";
         std::cout << "Launching " << stepNum << ":\n";
-        system(("C:/Users/Алехандро/Desktop/AlexProjects/MyVirtualMachine/x64/Release/MyVirtualMachine.exe "
-            "C:/Users/Алехандро/Desktop/AlexProjects/BadApple/Code/202p/asmCode_" + std::to_string(stepNum) + ".bin ").c_str());
+        system(("C:/Users/Алехандро/Desktop/AlexProjects/MyVirtualMachine/x64/Release/MyVirtualMachine.exe " +
+                        destAsmSavePath + std::to_string(stepNum) + ".bin ").c_str());
     }
 }
 

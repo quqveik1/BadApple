@@ -5,12 +5,12 @@
 #include <string>
 #include <SFML/Graphics.hpp>        
 #include <fstream>
+#include <cstdlib>
 
 #include "Constants.h"
 
-
-void asmPhoto(std::string path);
-void saveAsmCode(std::string& asmCode, int index, const std::string& pattern);
+void asmPhoto                  (std::string path);
+void saveAsmCode               (std::string& asmCode, const int index, const std::string& pattern);
 void loadAndSavePhotoCollection(std::string& asmCode, const int photoStartIndex, const int photoFinishIndex, const std::string& pattern, const std::string& extention);
 void decodePhoto               (std::string& asmCode, const unsigned int width, const unsigned int height, const sf::Image& image);
 void decodeWithCompressionPhoto(std::string& asmCode, const unsigned int width, const unsigned int height, const sf::Image& image);
@@ -26,12 +26,11 @@ int main()
 
 void asmPhoto(std::string path)
 {
-    const int step = 100;
+    const int step = 300;
 
     const std::string extention   = ".png";
-    const std::string savePattern = "Code/202p/asmCode_";
 
-    const int stepStart = 1;
+    const int stepStart = 7;
 
     int start = 1 + step * (stepStart - 1);
     int finish = start + step - 1;
@@ -42,15 +41,16 @@ void asmPhoto(std::string path)
 
         loadAndSavePhotoCollection(asmCode, start, finish, path, extention);
 
-        saveAsmCode(asmCode, stepNum, savePattern);
-        
-        std::cout << "Bad apple asm " + std::to_string(stepNum) + "/" + std::to_string(cSteps) +" file created successfully\n";
+        saveAsmCode(asmCode, stepNum, destAsmSavePath);
+
+        std::cout << "-----------\n";
+        std::cout << "Bad apple part " + std::to_string(stepNum) + "/" + std::to_string(cSteps) +" asm file created successfully\n";
 
         system(("C:/Users/Алехандро/Desktop/AlexProjects/MyVirtualMachine/x64/Release/TextToNumConverter.exe " +
-            savePattern + std::to_string(stepNum) + ".asm "
+            destAsmSavePath + std::to_string(stepNum) + ".asm "
             "false").c_str());
 
-        std::cout << "Bad apple " + std::to_string(stepNum) + "/" + std::to_string(cSteps) + " compiled successfully\n";
+        std::cout << "Bad apple part " + std::to_string(stepNum) + "/" + std::to_string(cSteps) + " compiled successfully\n";
 
         start += step;
         finish += step;
@@ -59,7 +59,6 @@ void asmPhoto(std::string path)
 
 void loadAndSavePhotoCollection(std::string& asmCode, const int photoStartIndex, const int photoFinishIndex, const std::string& pattern, const std::string& extention)
 {
-
     for (int i = photoStartIndex; i <= photoFinishIndex; i++)
     {
         char buffer[6];
@@ -86,7 +85,7 @@ void loadAndSavePhotoCollection(std::string& asmCode, const int photoStartIndex,
     asmCode += "\nhlt\n";
 }
 
-void decodePhoto(std::string& asmCode, const unsigned int width, const unsigned int height, sf::Image& image)
+void decodePhoto(std::string& asmCode, const unsigned int width, const unsigned int height, const sf::Image& image)
 {
     for (unsigned int x = 0; x < width; x++)
     {
@@ -109,8 +108,6 @@ void decodePhoto(std::string& asmCode, const unsigned int width, const unsigned 
     asmCode += "wait\n";
 }
 
-int lastCycleNum = 0;
-
 void saveColorLine(const unsigned int start, const unsigned int finish, const unsigned int y, const sf::Color color, std::string& asmCode)
 {
     const int r = color.r;
@@ -124,10 +121,11 @@ void saveColorLine(const unsigned int start, const unsigned int finish, const un
     asmCode += "push " + std::to_string(start) + "\n";
     asmCode += "pop ax\n";
 
+
+    static int lastCycleNum = 0;
     const std::string circleName = "cycle_" + std::to_string(lastCycleNum++);
 
     asmCode += circleName + ":\n";
-
 
     asmCode += "push ax\n";
     asmCode += "push " + std::to_string(y) + "\n";
@@ -160,14 +158,11 @@ void decodeWithCompressionPhoto(std::string& asmCode, const unsigned int width, 
 
             if (pixelColor != lastColor)
             {
-
                 saveColorLine(colorXStart, x - 1, y, lastColor, asmCode);
 
                 colorXStart = x;
                 lastColor = pixelColor;
             }
-
-
         }
 
         saveColorLine(colorXStart, width - 1, y, lastColor, asmCode);
@@ -178,7 +173,7 @@ void decodeWithCompressionPhoto(std::string& asmCode, const unsigned int width, 
 }
 
 
-void saveAsmCode(std::string& asmCode, int index, const std::string& pattern)
+void saveAsmCode(std::string& asmCode, const int index, const std::string& pattern)
 {
     std::ofstream file(pattern + std::to_string(index) + ".asm");
 
