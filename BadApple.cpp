@@ -3,15 +3,17 @@
 
 #include <iostream>
 #include <string>
-
 #include <SFML/Graphics.hpp>        
 #include <fstream>
 
+#include "Constants.h"
+
+
 void asmPhoto(std::string path);
-void saveAsmCode(std::string& asmCode);
-void doPrimitivePhotoSave(std::string& asmCode, int photoLen, std::string& fullPath, const std::string& pattern, const std::string& extention);
-void decodePhoto               (std::string& asmCode, const unsigned int width, const unsigned int height, sf::Image& image);
-void decodeWithCompressionPhoto(std::string& asmCode, const unsigned int width, const unsigned int height, sf::Image& image);
+void saveAsmCode(std::string& asmCode, int index, const std::string& pattern);
+void loadAndSavePhotoCollection(std::string& asmCode, const int photoStartIndex, const int photoFinishIndex, const std::string& pattern, const std::string& extention);
+void decodePhoto               (std::string& asmCode, const unsigned int width, const unsigned int height, const sf::Image& image);
+void decodeWithCompressionPhoto(std::string& asmCode, const unsigned int width, const unsigned int height, const sf::Image& image);
 
 int main()
 {
@@ -19,33 +21,52 @@ int main()
 
     asmPhoto("Photos/Bad_apple3/");
 
-    std::cout << "Bad apple asm file created successfully\n";
+    std::cout << "Compiled successfully\n";
 }
 
 void asmPhoto(std::string path)
 {
-    const int photoLen = 400;
+    const int step = 100;
 
-    std::string pattern   = path;
-    std::string extention = ".png";
+    const std::string extention   = ".png";
+    const std::string savePattern = "Code/202p/asmCode_";
 
-    std::string fullPath{};
+    const int stepStart = 1;
 
-    std::string asmCode{};
+    int start = 1 + step * (stepStart - 1);
+    int finish = start + step - 1;
 
-    doPrimitivePhotoSave(asmCode, photoLen, fullPath, pattern, extention);
+    for (int stepNum = stepStart; stepNum <= cSteps; stepNum++)
+    {
+        std::string asmCode{};
 
-    saveAsmCode(asmCode);
+        loadAndSavePhotoCollection(asmCode, start, finish, path, extention);
+
+        saveAsmCode(asmCode, stepNum, savePattern);
+        
+        std::cout << "Bad apple asm " + std::to_string(stepNum) + "/" + std::to_string(cSteps) +" file created successfully\n";
+
+        system(("C:/Users/Алехандро/Desktop/AlexProjects/MyVirtualMachine/x64/Release/TextToNumConverter.exe " +
+            savePattern + std::to_string(stepNum) + ".asm "
+            "false").c_str());
+
+        std::cout << "Bad apple " + std::to_string(stepNum) + "/" + std::to_string(cSteps) + " compiled successfully\n";
+
+        start += step;
+        finish += step;
+    }
 }
 
-void doPrimitivePhotoSave(std::string& asmCode, int photoLen, std::string& fullPath, const std::string& pattern, const std::string& extention)
+void loadAndSavePhotoCollection(std::string& asmCode, const int photoStartIndex, const int photoFinishIndex, const std::string& pattern, const std::string& extention)
 {
 
-    for (int i = 1; i <= photoLen; i++)
+    for (int i = photoStartIndex; i <= photoFinishIndex; i++)
     {
         char buffer[6];
         sprintf_s(buffer, sizeof(buffer), "%05d", i);
         std::string istr = buffer;
+
+        std::string fullPath{};
 
         fullPath = pattern + istr + extention;
 
@@ -53,11 +74,11 @@ void doPrimitivePhotoSave(std::string& asmCode, int photoLen, std::string& fullP
 
         if (!image.loadFromFile(fullPath))
         {
-            return;
+            break;
         }
 
-        unsigned int width = image.getSize().x;
-        unsigned int height = image.getSize().y;
+        const unsigned int width = image.getSize().x;
+        const unsigned int height = image.getSize().y;
 
         decodeWithCompressionPhoto(asmCode, width, height, image);
     }
@@ -125,7 +146,7 @@ void saveColorLine(const unsigned int start, const unsigned int finish, const un
     asmCode += "jbe " + circleName + "\n";
 }
 
-void decodeWithCompressionPhoto(std::string& asmCode, const unsigned int width, const unsigned int height, sf::Image& image)
+void decodeWithCompressionPhoto(std::string& asmCode, const unsigned int width, const unsigned int height, const sf::Image& image)
 {
     for (unsigned int y = 0; y < height; y++)
     {
@@ -152,14 +173,14 @@ void decodeWithCompressionPhoto(std::string& asmCode, const unsigned int width, 
         saveColorLine(colorXStart, width - 1, y, lastColor, asmCode);
     }
 
-    asmCode += "push 1\n";
+    asmCode += "push 20\n";
     asmCode += "wait\n";
 }
 
 
-void saveAsmCode(std::string& asmCode)
+void saveAsmCode(std::string& asmCode, int index, const std::string& pattern)
 {
-    std::ofstream file("Code/asmCode1.asm");
+    std::ofstream file(pattern + std::to_string(index) + ".asm");
 
     if (file.is_open())
     {
