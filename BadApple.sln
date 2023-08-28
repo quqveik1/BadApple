@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33920.266
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BadApple", "BadApple.vcxproj", "{0FE2BF53-B13E-4F4D-B94D-BF0E5D52317B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FE2BF53-B13E-4F4D-B94D-BF0E5D52317B}.Debug|x64.ActiveCfg = Debug|x64
+		{0FE2BF53-B13E-4F4D-B94D-BF0E5D52317B}.Debug|x64.Build.0 = Debug|x64
+		{0FE2BF53-B13E-4F4D-B94D-BF0E5D52317B}.Debug|x86.ActiveCfg = Debug|Win32
+		{0FE2BF53-B13E-4F4D-B94D-BF0E5D52317B}.Debug|x86.Build.0 = Debug|Win32
+		{0FE2BF53-B13E-4F4D-B94D-BF0E5D52317B}.Release|x64.ActiveCfg = Release|x64
+		{0FE2BF53-B13E-4F4D-B94D-BF0E5D52317B}.Release|x64.Build.0 = Release|x64
+		{0FE2BF53-B13E-4F4D-B94D-BF0E5D52317B}.Release|x86.ActiveCfg = Release|Win32
+		{0FE2BF53-B13E-4F4D-B94D-BF0E5D52317B}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5F5FCF41-E039-4AA4-9592-C5062BAEAB1E}
+	EndGlobalSection
+EndGlobal
