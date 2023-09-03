@@ -3,7 +3,6 @@
 
 #include "../Constants.h"
 
-
 void launchFilm();
 
 int main()
@@ -20,7 +19,7 @@ void launchFilm()
         std::cout << "-----------\n";
         std::cout << "Launching " << stepNum << ":\n";
         system(("C:/Users/Алехандро/Desktop/AlexProjects/MyVirtualMachine/x64/Release/MyVirtualMachine.exe " +
-                        destAsmSavePath + std::to_string(stepNum) + ".bin ").c_str());
+                destAsmSavePath + std::to_string(stepNum) + ".bin " + "268 202").c_str());
     }
 }
 

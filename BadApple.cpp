@@ -28,14 +28,16 @@ void asmPhoto(std::string path)
 {
     const int step = 300;
 
-    const std::string extention   = ".png";
+    const std::string extention   = ".jpg";
 
-    const int stepStart = 7;
+    const int stepStart = 6;
+
+    const int frameLen = 6572;
 
     int start = 1 + step * (stepStart - 1);
     int finish = start + step - 1;
 
-    for (int stepNum = stepStart; stepNum <= cSteps; stepNum++)
+    for (int stepNum = stepStart; start <= frameLen; stepNum++)
     {
         std::string asmCode{};
 
@@ -171,7 +173,6 @@ void decodeWithCompressionPhoto(std::string& asmCode, const unsigned int width, 
     asmCode += "push 20\n";
     asmCode += "wait\n";
 }
-
 
 void saveAsmCode(std::string& asmCode, const int index, const std::string& pattern)
 {
